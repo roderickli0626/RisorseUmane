@@ -1,0 +1,175 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Page.master.cs" Inherits="RisorseUmane.Page" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta charset="utf-8">
+    <title>RISORSE UMANE</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="Content/Images/logo.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet"> 
+    
+    <!-- Icon Font Stylesheet -->
+    <link href="Content/CSS/all.min.css" rel="stylesheet">
+    <link href="Content/CSS/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="Content/CSS/datatables.css" />
+
+    <!-- Libraries Stylesheet -->
+    <link href="Content/CSS/owl.carousel.min.css" rel="stylesheet">
+    <link href="Content/CSS/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="Content/CSS/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="Content/CSS/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="Content/CSS/jquery-ui.css">
+    <style>
+        td p {
+            margin-bottom: 0;
+        }
+
+        .form-switch .form-check-input {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23f58b8b'/%3e%3c/svg%3e")
+        }
+
+        .form-check-input {
+            border-color: #f58b8b;
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem rgba(235,22,22,0.25);
+        }
+    </style>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div class="container-fluid position-relative d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Caricamento...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3" runat="server" id="sidebar">
+            <nav class="navbar bg-secondary navbar-dark">
+                <a href="Dashboard.aspx" class="navbar-brand mx-4 mb-5 mt-2">
+                    <h5 class="text-primary"><i class="fa fa-database me-2"></i>RISORSE UMANE</h5>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-5">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="Content/Images/user-default.jpg" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-4 text-center">
+                        <h6 runat="server" id="AdminName" class="mb-0">--------------</h6>
+                        <span runat="server" id="SubName">STAFF</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a href="Dashboard.aspx" runat="server" id="liDashboard" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="Presenza.aspx" runat="server" id="liPresence" visible="false" class="nav-item nav-link"><i class="fa fa-user-tie me-2"></i>Presenza</a>
+                    <a href="Statistic.aspx" runat="server" id="liStatistic" visible="false" class="nav-item nav-link"><i class="fa fa-signal me-2"></i>Statistic</a>
+                    <a href="User.aspx" runat="server" id="liUser" visible="false" class="nav-item nav-link"><i class="fa fa-user-friends me-2"></i>Users</a>
+                    <a href="Malattia.aspx" runat="server" id="liMalattia" visible="false" class="nav-item nav-link"><i class="fa fa-bed me-2"></i>Malattia</a>
+                    <a href="Ferie.aspx" runat="server" id="liFerie" visible="false" class="nav-item nav-link"><i class="fa fa-home me-2"></i>Ferie</a>
+                    <a href="DPI.aspx" runat="server" id="liDPI" visible="false" class="nav-item nav-link"><i class="fa fa-cog me-2"></i>DPI</a>
+                    <a href="Manutenzione.aspx" runat="server" visible="false" id="liManutenzione" class="nav-item nav-link"><i class="fa fa-cogs me-2"></i>Manutenzione</a>
+                    <a href="Comunicazione.aspx" runat="server" id="liComunicazione" class="nav-item nav-link"><i class="fa fa-microchip me-2"></i>Comunicazione</a>
+                    <a href="Scadenziario.aspx" runat="server" id="liScadenziario" class="nav-item nav-link"><i class="fa fa-calendar me-2"></i>Scadenziario</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content" runat="server" id="contentPart">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+                <a href="Dashboard.aspx" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-user-edit"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="Content/Images/user-default.jpg" alt="" style="width: 40px; height: 40px;">
+                            <span runat="server" id="NavUserName" class="d-none d-lg-inline-flex">STAFF</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" runat="server" id="UserName" class="dropdown-item">My Profile</a>
+                            <a href="Login.aspx" class="dropdown-item">Esci</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+
+            <!-- Blank Start -->
+            <form id="form1" runat="server">
+                <div>
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+            </form>
+            <!-- Blank End -->
+
+
+            <!-- Footer Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-secondary rounded-top p-4">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center text-sm-start">
+                            &copy; <a href="Dashboard.aspx">RISORSE UMANE</a>, All Right Reserved. 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer End -->
+        </div>
+        <!-- Content End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="Scripts/JS/jquery-3.4.1.min.js"></script>
+    <script src="Scripts/JS/bootstrap.bundle.min.js"></script>
+    <script src="Scripts/JS/chart.min.js"></script>
+    <script src="Scripts/JS/easing.min.js"></script>
+    <script src="Scripts/JS/waypoints.min.js"></script>
+    <script src="Scripts/JS/owl.carousel.min.js"></script>
+    <script src="Scripts/JS/moment.min.js"></script>
+    <script src="Scripts/JS/moment-timezone.min.js"></script>
+    <script src="Scripts/JS/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="Scripts/JS/jquery.dataTables.js"></script>
+    <script src="Scripts/JS/datatables.js"></script>
+    <script src="Scripts/JS/jquery-ui.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="Scripts/JS/main.js"></script>
+
+    <script src="Scripts/jquery.signalR-2.4.3.js"></script>
+    <script src="signalr/hubs"></script>
+
+    <asp:ContentPlaceHolder ID="FooterPlaceHolder" runat="server">
+    </asp:ContentPlaceHolder>
+    
+</body>
+</html>

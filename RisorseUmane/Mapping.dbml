@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="RisorseUmaneDB" Class="MappingDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.Communication" Member="Communications">
+    <Type Name="Communication">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SenderId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ToRole" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ReceiverId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Subject" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DpiType" Member="DpiTypes">
+    <Type Name="DpiType">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="DpiType_DpiTypeForRequest" Member="DpiTypeForRequests" ThisKey="Id" OtherKey="DpiTypeId" Type="DpiTypeForRequest" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[User]" Member="Users">
+    <Type Name="User">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Password" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Surname" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Mobile" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Role" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FirstLogin" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="User_Request" Member="Requests" ThisKey="Id" OtherKey="SenderId" Type="Request" />
+      <Association Name="User_Presence" Member="Presences" ThisKey="Id" OtherKey="UserId" Type="Presence" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DpiTypeForRequest" Member="DpiTypeForRequests">
+    <Type Name="DpiTypeForRequest">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="RequestId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DpiTypeId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Size" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="DpiType_DpiTypeForRequest" Member="DpiType" ThisKey="DpiTypeId" OtherKey="Id" Type="DpiType" IsForeignKey="true" />
+      <Association Name="Request_DpiTypeForRequest" Member="Request" ThisKey="RequestId" OtherKey="Id" Type="Request" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RememberDate" Member="RememberDates">
+    <Type Name="RememberDate">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Remember" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="State" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CheckerID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Requests" Member="Requests">
+    <Type Name="Request">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SenderId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SCheckerId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ACheckerId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="RequestType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="FromDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="ToDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="SState" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="O" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="S" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="A" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Subject" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="SCheckDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="AState" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ACheckDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Request_DpiTypeForRequest" Member="DpiTypeForRequests" ThisKey="Id" OtherKey="RequestId" Type="DpiTypeForRequest" />
+      <Association Name="User_Request" Member="User" ThisKey="SenderId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Presence" Member="Presences">
+    <Type Name="Presence">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="O" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="S" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="A" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="User_Presence" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
