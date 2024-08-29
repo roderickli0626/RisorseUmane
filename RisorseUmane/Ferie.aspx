@@ -382,7 +382,7 @@
         function GetState(state) {
             if (state == 1) return '<span class="bg-success">ACCEPTED</span>';
             else if (state == 2) return '<span class="bg-danger">REJECTED</span>';
-            else return '<span class="bg-primary">PROGRESS</span>';
+            else return '<span class="bg-info">PROGRESS</span>';
         }
     </script>
 </asp:Content>
