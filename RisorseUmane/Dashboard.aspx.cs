@@ -24,6 +24,7 @@ namespace RisorseUmane
         LoginController loginSystem = new LoginController();
         RequestDAO requestDAO = new RequestDAO();
         UserDAO userDAO = new UserDAO();
+        PresenceDAO presenceDAO = new PresenceDAO();
         protected void Page_Load(object sender, EventArgs e)
         {
             user = loginSystem.GetCurrentUserAccount();
@@ -243,7 +244,23 @@ namespace RisorseUmane
 
                 success = requestDAO.Update(request);
 
-                // TODO: Add(Accepted) or Remove(Rejected) presence data
+                // TODO: Add(if State is Accepted) presence data
+                DateTime? startDate = request.FromDate;
+                DateTime? endDate = request.ToDate;
+                if (startDate != null && endDate != null && state == (int)State.Accepted)
+                {
+                    for (DateTime date = (startDate ?? DateTime.Now); date <= endDate; date = date.AddDays(1))
+                    {
+                        Presence presence = new Presence();
+                        presence.Date = date;
+                        presence.O = O;
+                        presence.S = S;
+                        presence.A = A;
+                        presence.UserId = request.SenderId;
+
+                        presenceDAO.Insert(presence);
+                    }
+                }
             }
             else
             {
@@ -257,6 +274,33 @@ namespace RisorseUmane
                 success = requestDAO.Update(request);
 
                 // TODO: Add(Accepted) or Remove(Rejected) presence data
+                DateTime? startDate = request.FromDate;
+                DateTime? endDate = request.ToDate;
+                if (startDate != null && endDate != null)
+                {
+                    if (state != (int)State.Progress)
+                    {
+                        for (DateTime date = (startDate ?? DateTime.Now); date <= endDate; date = date.AddDays(1))
+                        {
+                            Presence presence = presenceDAO.FindByDate(date).Where(p => p.UserId == request.SenderId).FirstOrDefault();
+                            if (presence != null) presenceDAO.Delete(presence.Id);
+                        }
+                    }
+                    if (state == (int)State.Accepted)
+                    {
+                        for (DateTime date = (startDate ?? DateTime.Now); date <= endDate; date = date.AddDays(1))
+                        {
+                            Presence presence = new Presence();
+                            presence.Date = date;
+                            presence.O = O;
+                            presence.S = S;
+                            presence.A = A;
+                            presence.UserId = request.SenderId;
+
+                            presenceDAO.Insert(presence);
+                        }
+                    }
+                }
             }
 
             if (success)
@@ -300,7 +344,23 @@ namespace RisorseUmane
 
                 success = requestDAO.Update(request);
 
-                // TODO: Add(Accepted) or Remove(Rejected) presence data
+                // TODO: Add(if State is Accepted) presence data
+                DateTime? startDate = request.FromDate;
+                DateTime? endDate = request.ToDate;
+                if (startDate != null && endDate != null && state == (int)State.Accepted)
+                {
+                    for (DateTime date = (startDate ?? DateTime.Now); date <= endDate; date = date.AddDays(1))
+                    {
+                        Presence presence = new Presence();
+                        presence.Date = date;
+                        presence.O = O;
+                        presence.S = S;
+                        presence.A = A;
+                        presence.UserId = request.SenderId;
+
+                        presenceDAO.Insert(presence);
+                    }
+                }
             }
             else
             {
@@ -314,6 +374,33 @@ namespace RisorseUmane
                 success = requestDAO.Update(request);
 
                 // TODO: Add(Accepted) or Remove(Rejected) presence data
+                DateTime? startDate = request.FromDate;
+                DateTime? endDate = request.ToDate;
+                if (startDate != null && endDate != null)
+                {
+                    if (state != (int)State.Progress)
+                    {
+                        for (DateTime date = (startDate ?? DateTime.Now); date <= endDate; date = date.AddDays(1))
+                        {
+                            Presence presence = presenceDAO.FindByDate(date).Where(p => p.UserId == request.SenderId).FirstOrDefault();
+                            if (presence != null) presenceDAO.Delete(presence.Id);
+                        }
+                    }
+                    if (state == (int)State.Accepted)
+                    {
+                        for (DateTime date = (startDate ?? DateTime.Now); date <= endDate; date = date.AddDays(1))
+                        {
+                            Presence presence = new Presence();
+                            presence.Date = date;
+                            presence.O = O;
+                            presence.S = S;
+                            presence.A = A;
+                            presence.UserId = request.SenderId;
+
+                            presenceDAO.Insert(presence);
+                        }
+                    }
+                }
             }
 
             if (success)
