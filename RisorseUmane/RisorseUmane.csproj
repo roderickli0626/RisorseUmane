@@ -299,6 +299,7 @@
     <Compile Include="Controller\ComunicazioneController.cs" />
     <Compile Include="Controller\CryptoController.cs" />
     <Compile Include="Controller\LoginController.cs" />
+    <Compile Include="Controller\PresenceController.cs" />
     <Compile Include="Controller\RememberController.cs" />
     <Compile Include="Controller\RequestController.cs" />
     <Compile Include="Controller\SessionController.cs" />
@@ -376,6 +377,7 @@
     <Compile Include="Model\DPITypeForRequestCheck.cs" />
     <Compile Include="Model\JSDataTable.cs" />
     <Compile Include="Model\MalattiaRequestChecker.cs" />
+    <Compile Include="Model\PresenceCheck.cs" />
     <Compile Include="Model\ProcResult.cs" />
     <Compile Include="Model\RememeberCheck.cs" />
     <Compile Include="Model\SearchResult.cs" />

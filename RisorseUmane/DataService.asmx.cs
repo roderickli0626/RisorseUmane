@@ -391,6 +391,31 @@ namespace RisorseUmane
             ResponseProc(success, "");
         }
 
+        [WebMethod(EnableSession = true)]
+        [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
+        public void FindPresences(int draw, int start, int length, string searchVal, string searchDate)
+        {
+            User user = loginSystem.GetCurrentUserAccount();
+            if (!loginSystem.IsStaffLoggedIn()) return;
+
+            PresenceController controller = new PresenceController();
+
+            DateTime? date = null;
+
+            if (!string.IsNullOrEmpty(searchDate))
+                date = DateTime.ParseExact(searchDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            SearchResult searchResult = controller.Search(start, length, searchVal, date);
+
+            JSDataTable result = new JSDataTable();
+            result.data = (IEnumerable<object>)searchResult.ResultList;
+            result.draw = draw;
+            result.recordsTotal = searchResult.TotalCount;
+            result.recordsFiltered = searchResult.TotalCount;
+
+            ResponseJson(result);
+        }
+
         protected void ResponseJson(Object result)
         {
             HttpResponse Response = Context.Response;

@@ -30,6 +30,10 @@ namespace RisorseUmane.DAO
         {
             return GetContext().Presences.Where(p => p.Date == date).ToList();
         }
+        public Presence FindByDateAndUser(DateTime date, int userID)
+        {
+            return GetContext().Presences.Where(p => p.Date == date && p.UserId == userID).FirstOrDefault();
+        }
 
         public bool Insert(Presence presence)
         {

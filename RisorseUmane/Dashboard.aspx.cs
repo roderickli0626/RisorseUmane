@@ -70,6 +70,7 @@ namespace RisorseUmane
             {
                 result = result.Where(r => r.UserId == user.Id).ToList();
             }
+            result = result.Where(r => (r.Remember ?? DateTime.Now.Date) <= DateTime.Now.Date.AddDays(7)).ToList();
 
             ExpireDateRepeater.DataSource = result.Select(r => new RememeberCheck(r));
             ExpireDateRepeater.DataBind();
@@ -244,13 +245,15 @@ namespace RisorseUmane
 
                 success = requestDAO.Update(request);
 
-                // TODO: Add(if State is Accepted) presence data
+                // Add(if State is Accepted) presence data
                 DateTime? startDate = request.FromDate;
                 DateTime? endDate = request.ToDate;
                 if (startDate != null && endDate != null && state == (int)State.Accepted)
                 {
                     for (DateTime date = (startDate ?? DateTime.Now); date <= endDate; date = date.AddDays(1))
                     {
+                        // TODO: Before Add, Need to Delete by Date and User???
+
                         Presence presence = new Presence();
                         presence.Date = date;
                         presence.O = O;
@@ -273,7 +276,7 @@ namespace RisorseUmane
 
                 success = requestDAO.Update(request);
 
-                // TODO: Add(Accepted) or Remove(Rejected) presence data
+                // Add(Accepted) or Remove(Rejected) presence data
                 DateTime? startDate = request.FromDate;
                 DateTime? endDate = request.ToDate;
                 if (startDate != null && endDate != null)
@@ -344,13 +347,15 @@ namespace RisorseUmane
 
                 success = requestDAO.Update(request);
 
-                // TODO: Add(if State is Accepted) presence data
+                // Add(if State is Accepted) presence data
                 DateTime? startDate = request.FromDate;
                 DateTime? endDate = request.ToDate;
                 if (startDate != null && endDate != null && state == (int)State.Accepted)
                 {
                     for (DateTime date = (startDate ?? DateTime.Now); date <= endDate; date = date.AddDays(1))
                     {
+                        // TODO: Before Add, Need to Delete by Date and User???
+
                         Presence presence = new Presence();
                         presence.Date = date;
                         presence.O = O;
@@ -373,7 +378,7 @@ namespace RisorseUmane
 
                 success = requestDAO.Update(request);
 
-                // TODO: Add(Accepted) or Remove(Rejected) presence data
+                // Add(Accepted) or Remove(Rejected) presence data
                 DateTime? startDate = request.FromDate;
                 DateTime? endDate = request.ToDate;
                 if (startDate != null && endDate != null)
