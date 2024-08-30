@@ -37,7 +37,7 @@ namespace RisorseUmane.Controller
             return result;
         }
 
-        public SearchResult SearchForDashboard(int start, int length, string searchVal)
+        public SearchResult SearchForDashboard(int start, int length, string searchVal, DateTime? date)
         {
             SearchResult result = new SearchResult();
             IEnumerable<User> userList = userDao.FindAll().Where(u => u.Role != (int)Role.Staff);
@@ -46,14 +46,28 @@ namespace RisorseUmane.Controller
             result.TotalCount = userList.Count();
             userList = userList.Skip(start).Take(length);
 
+            if (date == null) date = DateTime.Now.Date;
+
             List<object> checks = new List<object>();
             PresenceDAO presenceDAO = new PresenceDAO();
             foreach (User user in userList)
             {
-                UserCheck userCheck = new UserCheck(user);
-                Presence presence = presenceDAO.FindByUser(user.Id).Where(p => p.Date == DateTime.Now.Date).FirstOrDefault();
-                userCheck.Presence = (string.IsNullOrEmpty(presence?.A ?? ""));
-                checks.Add(userCheck);
+                Presence presence = presenceDAO.FindByDateAndUser(date ?? DateTime.Now.Date, user.Id);
+                if (presence != null)
+                {
+                    checks.Add(new PresenceCheck(presence));
+                }
+                else
+                {
+                    PresenceCheck presenceCheck = new PresenceCheck();
+                    presenceCheck.Name = user.Name;
+                    presenceCheck.Date = date?.ToString("dd/MM/yyyy");
+                    presenceCheck.UserId = user.Id;
+                    presenceCheck.O = 8;
+                    presenceCheck.S = 0;
+                    presenceCheck.A = "";
+                    checks.Add(presenceCheck);
+                }
             }
             result.ResultList = checks;
 

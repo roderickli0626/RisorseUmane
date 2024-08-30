@@ -47,13 +47,19 @@ namespace RisorseUmane
 
         [WebMethod(EnableSession = true)]
         [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
-        public void FindDashboardUsers(int draw, int start, int length, string searchVal)
+        public void FindDashboardUsers(int draw, int start, int length, string searchVal, string searchDate)
         {
             User user = loginSystem.GetCurrentUserAccount();
             if (!loginSystem.IsCEOLoggedIn() && !loginSystem.IsAdminLoggedIn() && (user == null)) return;
 
             UserController userController = new UserController();
-            SearchResult searchResult = userController.SearchForDashboard(start, length, searchVal);
+
+            DateTime? date = null;
+
+            if (!string.IsNullOrEmpty(searchDate))
+                date = DateTime.ParseExact(searchDate, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+            SearchResult searchResult = userController.SearchForDashboard(start, length, searchVal, date);
 
             JSDataTable result = new JSDataTable();
             result.data = (IEnumerable<object>)searchResult.ResultList;

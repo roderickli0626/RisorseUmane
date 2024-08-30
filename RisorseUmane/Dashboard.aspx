@@ -16,6 +16,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:HiddenField ID="HfLoginRole" runat="server" ClientIDMode="Static" />
     <asp:HiddenField ID="HfRequestID" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="HfPresenceID" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="HfUserID" runat="server" ClientIDMode="Static" />
+    <asp:HiddenField ID="HfDate" runat="server" ClientIDMode="Static" />
     <div class="container-fluid pt-4 px-4">
         <asp:ScriptManager ID="ScriptManager" runat="server"></asp:ScriptManager>
         <div class="row g-4" style="height: 100vh;">
@@ -470,6 +473,46 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade show" id="PresenceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" data-bs-backdrop="static" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content bg-secondary">
+                <div class="modal-header">
+                    <h4 class="modal-title text-white" id="modalTitle">PRESENZA</h4>
+                </div>
+                <div class="modal-body">
+                    <asp:UpdatePanel runat="server" ID="UpdatePanel1" ClientIDMode="Static" class="row gy-3">
+                        <ContentTemplate>
+                            <asp:ValidationSummary ID="ValSummary" runat="server" CssClass="mt-lg mb-lg text-left bg-gradient" ClientIDMode="Static" />
+                            <asp:CustomValidator ID="ServerValidator" runat="server" ErrorMessage="Save Failed." Display="None"></asp:CustomValidator>
+                            <asp:CustomValidator ID="ServerValidatorForOSA" runat="server" ErrorMessage="Inserire un indirizzo O, S, A." Display="None"></asp:CustomValidator>
+                            <div class="col-md-12 row justify-content-between pe-0">
+                                <div class="mb-3 col-3">
+                                    <label for="TxtName" class="form-label">O</label>
+                                    <asp:TextBox runat="server" ID="TxtO" AutoCompleteType="Disabled" ClientIDMode="Static" CssClass="form-control form-control-lg"></asp:TextBox>
+                                </div>
+                                <div class="mb-3 col-3">
+                                    <label for="TxtName" class="form-label">S</label>
+                                    <asp:TextBox runat="server" ID="TxtS" AutoCompleteType="Disabled" ClientIDMode="Static" CssClass="form-control form-control-lg"></asp:TextBox>
+                                </div>
+                                <div class="mb-3 col-3">
+                                    <label for="TxtName" class="form-label">A</label>
+                                    <asp:TextBox runat="server" ID="TxtA" AutoCompleteType="Disabled" ClientIDMode="Static" CssClass="form-control form-control-lg"></asp:TextBox>
+                                </div>
+                            </div>
+                        </ContentTemplate>
+                        <Triggers>
+                            <asp:AsyncPostBackTrigger ControlID="BtnSave" />
+                        </Triggers>
+                    </asp:UpdatePanel>
+                </div>
+                <div class="modal-footer">
+                    <asp:Button runat="server" ID="BtnSave" ClientIDMode="Static" CssClass="btn btn-primary" Text="Conferma" OnClick="BtnSave_Click" />
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="FooterPlaceHolder" runat="server">
     <script src="Scripts/JS/jquery.datetimepicker.full.min.js"></script>
@@ -687,9 +730,9 @@
             "processing": true,
             "ordering": false,
             "columns": [{
-                "data": "Presence",
+                "data": "A",
                 "render": function (data, type, row, meta) {
-                    var bg = data ? "bg-success" : "bg-danger";
+                    var bg = (data == "") ? "bg-success" : "bg-danger";
                     return `<div class="position-relative">
                                 <img class="rounded-circle" src="Content/Images/user-default.jpg" alt="" style="width: 40px; height: 40px;">
                                 <div class="${bg} rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
@@ -698,12 +741,13 @@
             }, {
                 "data": "Name",
                 "render": function (data, type, row, meta) {
-                    return `<h6 class="mb-0" style="text-align: left">${data}</h6>`;
+                    return `<h6 class="mb-0 OSA" style="text-align: left;cursor: pointer;">${data}</h6>`;
                 }
             }],
 
             "fnServerParams": function (aoData) {
                 aoData.searchVal = $('#userSearch').val();
+                aoData.searchDate = $('#HfDate').val();
             },
 
             "rowCallback": function (row, data, index) {
@@ -714,6 +758,22 @@
 
         $("#userSearch").on('input', function () {
             datatable.fnDraw();
+        });
+
+        datatable.on('click', '.OSA', function (e) {
+            e.preventDefault();
+
+            var row = datatable.fnGetData($(this).closest('tr'));
+
+            $("#PresenceModal").modal('show');
+            $("#modalTitle").text("PRESENZA");
+            $("#HfPresenceID").val(row.Id);
+            $("#HfUserID").val(row.UserId);
+            $("#HfDate").val(row.Date);
+            $("#ValSummary").addClass("d-none");
+            $("#TxtO").val(row.O);
+            $("#TxtS").val(row.S);
+            $("#TxtA").val(row.A);
         });
     </script>
     <script>

@@ -207,6 +207,10 @@ namespace RisorseUmane
 
         protected void Calendar1_SelectionChanged(object sender, EventArgs e)
         {
+            HfDate.Value = Calendar1.SelectedDate.Date.ToString("dd/MM/yyyy");
+            string script = "$('#HfDate').val('" + HfDate.Value + "');datatable.fnDraw();";
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "refreshUserTable", script, true);
+
             UpdateCalendar();
         }
 
@@ -514,6 +518,35 @@ namespace RisorseUmane
             DPIRepeater.DataBind();
 
             UpdateCalendar();
+        }
+
+        protected void BtnSave_Click(object sender, EventArgs e)
+        {
+            bool success = false;
+
+            int presenceID = ParseUtil.TryParseInt(HfPresenceID.Value) ?? 0;
+            int userID = ParseUtil.TryParseInt(HfUserID.Value) ?? 0;
+            DateTime? date = ParseUtil.TryParseDate(HfDate.Value, "dd/MM/yyyy");
+
+            int O = ParseUtil.TryParseInt(TxtO.Text) ?? 0;
+            int S = ParseUtil.TryParseInt(TxtS.Text) ?? 0;
+            string A = TxtA.Text;
+
+            PresenceController presenceController = new PresenceController();
+            success = presenceController.SavePresence(presenceID, O, S, A, userID, date);
+
+            if (success)
+            {
+                string script = "$('#PresenceModal').modal('hide');datatable.fnDraw();";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "closeModal", script, true);
+                return;
+                // Page.Response.Redirect(Page.Request.Url.ToString(), true);
+            }
+            else
+            {
+                ServerValidator.IsValid = false;
+                return;
+            }
         }
     }
 }
