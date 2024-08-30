@@ -17,10 +17,10 @@ namespace RisorseUmane.Controller
         {
             requestDAO = new RequestDAO();
         }
-        public SearchResult SearchMalattias(int start, int length, string searchVal, int type)
+        public SearchResult SearchMalattias(int start, int length, string searchVal, int type, User user)
         {
             SearchResult result = new SearchResult();
-            IEnumerable<Request> requestList = requestDAO.FindAll().Where(r => r.RequestType == (int)RequestType.Malattia);
+            IEnumerable<Request> requestList = requestDAO.FindAll().Where(r => r.RequestType == (int)RequestType.Malattia && r.SenderId == user.Id);
             if (!string.IsNullOrEmpty(searchVal)) requestList = requestList.Where(x => x.Description.ToLower().Contains(searchVal.ToLower())).ToList();
             if (type != 0) requestList = requestList.Where(x => ((x.SState == type) && x.AState == (int)State.Progress) || ((x.AState == type) && x.AState != (int)State.Progress)).ToList();
 
@@ -78,10 +78,10 @@ namespace RisorseUmane.Controller
         }
 
         // Ferie Modulo
-        public SearchResult SearchFeries(int start, int length, string searchVal, int type)
+        public SearchResult SearchFeries(int start, int length, string searchVal, int type, User user)
         {
             SearchResult result = new SearchResult();
-            IEnumerable<Request> requestList = requestDAO.FindAll().Where(r => r.RequestType == (int)RequestType.Ferie);
+            IEnumerable<Request> requestList = requestDAO.FindAll().Where(r => r.RequestType == (int)RequestType.Ferie && r.SenderId == user.Id);
             if (!string.IsNullOrEmpty(searchVal)) requestList = requestList.Where(x => x.Description.ToLower().Contains(searchVal.ToLower())).ToList();
             if (type != 0) requestList = requestList.Where(x => ((x.SState == type) && x.AState == (int)State.Progress) || ((x.AState == type) && x.AState != (int)State.Progress)).ToList();
 
@@ -136,10 +136,10 @@ namespace RisorseUmane.Controller
         }
 
         // Manutenzione Modulo
-        public SearchResult SearchManutenziones(int start, int length, string searchVal, int type)
+        public SearchResult SearchManutenziones(int start, int length, string searchVal, int type, User user)
         {
             SearchResult result = new SearchResult();
-            IEnumerable<Request> requestList = requestDAO.FindAll().Where(r => r.RequestType == (int)RequestType.Manutenzione);
+            IEnumerable<Request> requestList = requestDAO.FindAll().Where(r => r.RequestType == (int)RequestType.Manutenzione && r.SenderId == user.Id);
             if (!string.IsNullOrEmpty(searchVal)) requestList = requestList.Where(x => x.Description.ToLower().Contains(searchVal.ToLower())).ToList();
             if (type != 0) requestList = requestList.Where(x => ((x.SState == type) && x.AState == (int)State.Progress) || ((x.AState == type) && x.AState != (int)State.Progress)).ToList();
 
@@ -190,10 +190,10 @@ namespace RisorseUmane.Controller
         }
 
         // DPI/Material Modulo
-        public SearchResult SearchDPIMaterials(int start, int length, string searchVal, int type)
+        public SearchResult SearchDPIMaterials(int start, int length, string searchVal, int type, User user)
         {
             SearchResult result = new SearchResult();
-            IEnumerable<Request> requestList = requestDAO.FindAll().Where(r => r.RequestType == (int)RequestType.Dpi);
+            IEnumerable<Request> requestList = requestDAO.FindAll().Where(r => r.RequestType == (int)RequestType.Dpi && r.SenderId == user.Id);
             if (!string.IsNullOrEmpty(searchVal)) requestList = requestList.Where(x => string.Join(", ", x.DpiTypeForRequests.Select(d => d.DpiType.Description)).ToLower().Contains(searchVal.ToLower())).ToList();
             if (type != 0) requestList = requestList.Where(x => ((x.SState == type) && x.AState == (int)State.Progress) || ((x.AState == type) && x.AState != (int)State.Progress)).ToList();
 

@@ -97,7 +97,7 @@ namespace RisorseUmane
             if (!loginSystem.IsEmployerLoggedIn() && !loginSystem.IsLogisticLoggedIn()) return;
 
             RequestController requestController = new RequestController();
-            SearchResult searchResult = requestController.SearchMalattias(start, length, searchVal, type);
+            SearchResult searchResult = requestController.SearchMalattias(start, length, searchVal, type, user);
 
             JSDataTable result = new JSDataTable();
             result.data = (IEnumerable<object>)searchResult.ResultList;
@@ -115,7 +115,7 @@ namespace RisorseUmane
             User user = loginSystem.GetCurrentUserAccount();
             if (!loginSystem.IsEmployerLoggedIn() && !loginSystem.IsLogisticLoggedIn()) return;
 
-            List<Request> result = new RequestDAO().FindAll().Where(r => r.RequestType == (int)RequestType.Malattia).ToList();
+            List<Request> result = new RequestDAO().FindAll().Where(r => r.RequestType == (int)RequestType.Malattia && r.SenderId == user.Id).ToList();
             List<MalattiaRequestChecker> result1 = result.Where(x => x.Description.Contains(term)).Select(r => new MalattiaRequestChecker(r)).ToList();
             ResponseJson(result1);
         }
@@ -141,7 +141,7 @@ namespace RisorseUmane
             if (!loginSystem.IsEmployerLoggedIn() && !loginSystem.IsLogisticLoggedIn()) return;
 
             RequestController requestController = new RequestController();
-            SearchResult searchResult = requestController.SearchFeries(start, length, searchVal, type);
+            SearchResult searchResult = requestController.SearchFeries(start, length, searchVal, type, user);
 
             JSDataTable result = new JSDataTable();
             result.data = (IEnumerable<object>)searchResult.ResultList;
@@ -159,7 +159,7 @@ namespace RisorseUmane
             User user = loginSystem.GetCurrentUserAccount();
             if (!loginSystem.IsEmployerLoggedIn() && !loginSystem.IsLogisticLoggedIn()) return;
 
-            List<Request> result = new RequestDAO().FindAll().Where(r => r.RequestType == (int)RequestType.Ferie).ToList();
+            List<Request> result = new RequestDAO().FindAll().Where(r => r.RequestType == (int)RequestType.Ferie && r.SenderId == user.Id).ToList();
             List<MalattiaRequestChecker> result1 = result.Where(x => x.Description.Contains(term)).Select(r => new MalattiaRequestChecker(r)).ToList();
             ResponseJson(result1);
         }
@@ -186,7 +186,7 @@ namespace RisorseUmane
             if (!loginSystem.IsEmployerLoggedIn() && !loginSystem.IsLogisticLoggedIn()) return;
 
             RequestController requestController = new RequestController();
-            SearchResult searchResult = requestController.SearchManutenziones(start, length, searchVal, type);
+            SearchResult searchResult = requestController.SearchManutenziones(start, length, searchVal, type, user);
 
             JSDataTable result = new JSDataTable();
             result.data = (IEnumerable<object>)searchResult.ResultList;
@@ -204,7 +204,7 @@ namespace RisorseUmane
             User user = loginSystem.GetCurrentUserAccount();
             if (!loginSystem.IsEmployerLoggedIn() && !loginSystem.IsLogisticLoggedIn()) return;
 
-            List<Request> result = new RequestDAO().FindAll().Where(r => r.RequestType == (int)RequestType.Manutenzione).ToList();
+            List<Request> result = new RequestDAO().FindAll().Where(r => r.RequestType == (int)RequestType.Manutenzione && r.SenderId == user.Id).ToList();
             List<MalattiaRequestChecker> result1 = result.Where(x => x.Description.Contains(term)).Select(r => new MalattiaRequestChecker(r)).ToList();
             ResponseJson(result1);
         }
@@ -230,7 +230,7 @@ namespace RisorseUmane
             if (!loginSystem.IsEmployerLoggedIn() && !loginSystem.IsLogisticLoggedIn()) return;
 
             RequestController requestController = new RequestController();
-            SearchResult searchResult = requestController.SearchDPIMaterials(start, length, searchVal, type);
+            SearchResult searchResult = requestController.SearchDPIMaterials(start, length, searchVal, type, user);
 
             JSDataTable result = new JSDataTable();
             result.data = (IEnumerable<object>)searchResult.ResultList;
@@ -248,7 +248,7 @@ namespace RisorseUmane
             User user = loginSystem.GetCurrentUserAccount();
             if (!loginSystem.IsEmployerLoggedIn() && !loginSystem.IsLogisticLoggedIn()) return;
 
-            List<Request> result = new RequestDAO().FindAll().Where(r => r.RequestType == (int)RequestType.Dpi).ToList();
+            List<Request> result = new RequestDAO().FindAll().Where(r => r.RequestType == (int)RequestType.Dpi && r.SenderId == user.Id).ToList();
             List<MalattiaRequestChecker> result1 = result.Where(x => string.Join(", ", x.DpiTypeForRequests.Select(d => d.DpiType.Description)).Contains(term)).Select(r => new MalattiaRequestChecker(r)).ToList();
             ResponseJson(result1);
         }
